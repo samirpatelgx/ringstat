@@ -1,0 +1,30 @@
+{
+  "name": "ringstat",
+  "version": "1.0.0",
+  "description": "Find statistics, comparisons, ratings of athletes. Contribute by giving your own ratings or feedback on athletes.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/samirpatelgx/ringstat.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/samirpatelgx/ringstat/issues"
+  },
+  "homepage": "https://github.com/samirpatelgx/ringstat#readme",
+  "dependencies": {
+    "aws-sdk": "^2.206.0",
+    "cookie-session": "^2.0.0-beta.3",
+    "dynamoose": "^0.8.6",
+    "express": "^4.16.2",
+    "nodemon": "^1.17.1",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0",
+    "uuid": "^3.2.1"
+  }
+}
