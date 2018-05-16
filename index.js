@@ -2,8 +2,8 @@ const express = require("express");
 const dynamoose = require("dynamoose");
 const cookieSession = require("cookie-session");
 const passport = require("passport");
-require("./config/dynamooseConf");
 const keys = require('./config/keys');
+require("./config/dynamooseConf");
 require('./models/User');
 require('./services/passport');
 
