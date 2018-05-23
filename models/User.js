@@ -18,6 +18,10 @@ const userSchema = new Schema({
       project: false,
       throughput: 3
     }
+  },
+  credits: {
+    type: Number,
+    default: 0
   }
 },
 {

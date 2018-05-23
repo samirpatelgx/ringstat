@@ -12,7 +12,6 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((id, done) => {
   User.get({ userId : id}, (err, user) => {
-    debugger;
     done(null, user);
   });
 });
@@ -28,7 +27,6 @@ passport.use(
         new User({ userId: uuidv1(), googleId: profile.id }).save()
         .then(user => done(null, user));
       } else {
-        debugger
         done(err, existingUser);
       }
     });

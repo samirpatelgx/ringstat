@@ -5,5 +5,7 @@ module.exports = {
   cookieKey: process.env.COOKIE_KEY,
   awsAccessKeyId: process.env.AWS_ACCES_KEY_ID,
   awsSecretAccessKey: process.env.AWS_SECRET_ACCES_KEY,
-  awsRegion: process.env.AWS_REGION
+  awsRegion: process.env.AWS_REGION,
+  stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY
 };
