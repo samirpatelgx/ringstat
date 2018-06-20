@@ -1,9 +1,9 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const dynamoose = require("dynamoose");
+const dynoMongo = require("../../dynomongo/");
 const keys = require("../config/keys.js");
 
-const User = dynamoose.model("users");
+const User = dynoMongo.model("users");
 const uuidv1 = require("uuid/v1");
 
 passport.serializeUser((user, done) => {
@@ -22,8 +22,8 @@ passport.use(
     clientSecret: keys.googleClientSecret,
     callbackURL: "/auth/google/callback"
   }, (accessToken, refreshToken, profile, done) => {
-    User.query( { googleId: { eq: profile.id } },(err, existingUser) => { 
-      if (existingUser.count == 0) {
+    User.query( { googleId: profile.id },(err, existingUser) => { 
+      if (!existingUser) {
         new User({ userId: uuidv1(), googleId: profile.id }).save()
         .then(user => done(null, user));
       } else {

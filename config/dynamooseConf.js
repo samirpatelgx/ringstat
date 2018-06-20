@@ -1,7 +1,7 @@
 const keys = require('./keys');
-const dynamoose = require("dynamoose");
+const dynaMongo = require("../../dynomongo");
 
-dynamoose.AWS.config.update({
+dynaMongo.AWS.config.update({
   accessKeyId: keys.awsAccessKeyId,
   secretAccessKey: keys.awsSecretAccessKey,
   region: keys.awsRegion
@@ -9,5 +9,5 @@ dynamoose.AWS.config.update({
 if (process.env.NODE_ENV == "production") {
   
 } else {
-  dynamoose.local('http://localhost:8000');
+  dynaMongo.local('http://localhost:8000');
 }
