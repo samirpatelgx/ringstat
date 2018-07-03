@@ -51,7 +51,16 @@ const surveySchema = new Schema({
       read: 3,
       write: 3
     }
-  }
+  },
+  global: [{
+    _user: { 
+      type: String,
+      hashKey: true,
+      name: "survey_userId_index",
+      project: "ALL"
+    },
+    throughput: 3
+  }]
 });
 
 dynoMongo.model("surveys",surveySchema)

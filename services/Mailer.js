@@ -18,9 +18,11 @@ class Mailer extends helper.Mail {
   }
    
   formatAddresses(recipients) {
-    return recipients.map(( { email } ) => {
-      return new helper.Email(email);
+    const recipientsToMail = [];
+    Object.keys(recipients).forEach(email => {
+      recipientsToMail.push(new helper.Email(email));
     });
+    return recipientsToMail
   }
   addClickTracking() {
     const trackingSettings = new helper.TrackingSettings();

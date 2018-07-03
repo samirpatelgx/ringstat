@@ -10,7 +10,17 @@ const surveyTemplate = require("../services/emailTemplates/surveyTemplates")
 const Survey = dynaMongo.model("surveys");
 
 module.exports = app => {
-  app.get("/api/surveys/thanks", (req, res) => {
+  app.get("/api/surveys", requireLogin, async (req, res) => {
+    const newQuery = {
+      projection: "surveyId, subject, yes, lastResponded, #_user, body, dateSent, title",
+      // attributeNames: { "#user": "_user" }
+    }
+    const surveys = await Survey.query({ _user: req.user.userId }, newQuery);
+
+    res.send(surveys);
+  });
+
+  app.get("/api/surveys/:surveyId/:choice", (req, res) => {
     res.send("Thanks for voting!");
   })
 
@@ -27,16 +37,38 @@ module.exports = app => {
     })
     .compact()
     .uniqBy("email", "surveyId")
+    .each(({ surveyId, email, choice }) => {
+      let keySchema = { surveyId: surveyId }
+      let newQuery = {
+        updateValues: `SET recipients.#email.responded = :update_responded, lastResponded = :curDate ADD ${choice} :add_choice`,
+        conditionValues: `recipients.#email.responded = :curr_responded`,
+        attributeNames: {
+          "#email": email
+        },
+        attributeValues: { 
+          ":update_responded": true,
+          ":curr_responded": false,
+          ":add_choice": 1,
+          ":curDate": Date.now()
+        },
+        returnValues: "ALL_NEW"
+      }
+      Survey.update(keySchema, newQuery,(err,res) => {
+        if (err) {
+          console.log(err);
+        }
+        console.log(res);
+      })
+    })
     .value();
-
-    console.log(events);
 
     res.send({});
   });
 
   app.post("/api/surveys", requireLogin, requireCredits, async (req, res) => {
     const { title, subject, body, recipients } = req.body;
-    const recipientEmails = recipients.split(",").map(email => ({ email: email.trim() }));
+    const recipientEmails = {}
+    recipients.split(",").forEach(email => (recipientEmails[email.trim()] = { clicked: false, responded: false } ));
     const survey = new Survey({
       surveyId: require("uuid/v1")(),
       title,
@@ -48,13 +80,7 @@ module.exports = app => {
     });
 
     try {
-      await survey.save(undefined,undefined,
-      //val => {
-      //   console.log(val.Item.recipients); 
-      //   val.Item.recipients = { L: [{ M: { email: { S: "samirpatelgx@gmail.com" } }}] };
-      //   return val;
-      // }
-      undefined);
+      await survey.save();
       const mailer = new Mailer(survey, surveyTemplate(survey));
       await mailer.send();
       //await survey.save();

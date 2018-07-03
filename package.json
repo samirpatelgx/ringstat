@@ -12,8 +12,8 @@
     "install-client": "npm install --prefix client && npm run build --prefix client",
     "install-server": "npm install",
     "install-ringstat": "npm run install-server && npm run install-client",
-    "//webhook": "./sendgrid_webhook.sh",
-    "webhook-ngrok": "./ngrok http 5000"
+    "webhook-local": "./sendgrid_webhook.sh",
+    "webhook": "./ngrok http 5000"
   },
   "repository": {
     "type": "git",
